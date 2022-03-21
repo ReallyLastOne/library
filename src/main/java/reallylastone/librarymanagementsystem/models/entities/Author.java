@@ -1,13 +1,9 @@
-package reallylastone.librarymanagementsystem.model.entities;
+package reallylastone.librarymanagementsystem.models.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,14 +12,18 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@RequiredArgsConstructor
 public class Author {
     @Id
     private Long id;
 
+    @NonNull
     private String fName;
 
+    @NonNull
     private String lName;
 
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private List<Book> books;
 }

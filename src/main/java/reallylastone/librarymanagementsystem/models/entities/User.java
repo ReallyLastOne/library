@@ -1,4 +1,4 @@
-package reallylastone.librarymanagementsystem.model.entities;
+package reallylastone.librarymanagementsystem.models.entities;
 
 
 import jakarta.persistence.Entity;

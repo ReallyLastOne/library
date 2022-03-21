@@ -1,4 +1,4 @@
-package reallylastone.librarymanagementsystem.model;
+package reallylastone.librarymanagementsystem.models;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
