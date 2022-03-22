@@ -1,9 +1,12 @@
 package reallylastone.librarymanagementsystem.models.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.domain.Range;
-import org.springframework.lang.Nullable;
 import reallylastone.librarymanagementsystem.models.Dimension;
 import reallylastone.librarymanagementsystem.models.PublicationPlace;
 import reallylastone.librarymanagementsystem.utils.RangeToString;
@@ -12,20 +15,17 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @Builder
-@ToString
+@NoArgsConstructor
 public class Book {
     @Id
-    @NonNull
-    private Long ISBN;
+    private Long isbn;
 
     @ManyToOne
-    @NonNull
     private Author author;
 
-    @NonNull
     private String title;
 
     private String format;
@@ -50,7 +50,7 @@ public class Book {
 
     private Locale language;
 
-    public static BookBuilder builder(Long ISBN, Author author, String title) {
-        return new BookBuilder().ISBN(ISBN).author(author).title(title);
+    public static BookBuilder builder(Long isbn, Author author, String title) {
+        return new BookBuilder().isbn(isbn).author(author).title(title);
     }
 }
