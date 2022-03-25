@@ -3,8 +3,6 @@ package reallylastone.librarymanagementsystem.utils;
 import jakarta.persistence.AttributeConverter;
 import org.springframework.data.domain.Range;
 
-import java.util.Arrays;
-
 public class RangeToString implements AttributeConverter<Range<Integer>, String> {
     @Override
     public String convertToDatabaseColumn(Range<Integer> range) {

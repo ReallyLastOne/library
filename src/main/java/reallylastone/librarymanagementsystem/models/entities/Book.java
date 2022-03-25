@@ -1,14 +1,13 @@
 package reallylastone.librarymanagementsystem.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.data.domain.Range;
 import reallylastone.librarymanagementsystem.models.Dimension;
 import reallylastone.librarymanagementsystem.models.PublicationPlace;
+import reallylastone.librarymanagementsystem.utils.RangeSerializer;
 import reallylastone.librarymanagementsystem.utils.RangeToString;
 
 import java.time.LocalDateTime;
@@ -21,9 +20,11 @@ import java.util.Locale;
 @NoArgsConstructor
 public class Book {
     @Id
-    private Long isbn;
+    @Getter(AccessLevel.NONE)
+    @JsonProperty("ISBN")
+    private Long ISBN;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Author author;
 
     private String title;
@@ -31,7 +32,8 @@ public class Book {
     private String format;
 
     @Convert(converter = RangeToString.class)
-    private Range<Integer> ageRange;
+    @JsonSerialize(using = RangeSerializer.class)
+    private Range<Integer> ageRange = Range.unbounded();
 
     @Embedded
     private Dimension dimension;
@@ -50,7 +52,11 @@ public class Book {
 
     private Locale language;
 
-    public static BookBuilder builder(Long isbn, Author author, String title) {
-        return new BookBuilder().isbn(isbn).author(author).title(title);
+    public static BookBuilder builder(Long ISBN, Author author, String title) {
+        return new BookBuilder().ISBN(ISBN).author(author).title(title);
+    }
+
+    public Long getISBN() {
+        return ISBN;
     }
 }

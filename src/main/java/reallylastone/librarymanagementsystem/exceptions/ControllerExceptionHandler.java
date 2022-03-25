@@ -15,4 +15,18 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         error.setMessage(ex.getMessage());
         return new ResponseEntity<>(error, error.getStatus());
     }
+
+    @ExceptionHandler(EntityAlreadyExist.class)
+    public ResponseEntity<ApiError> handleEntityAlreadyExistException(EntityAlreadyExist ex) {
+        ApiError error = new ApiError(HttpStatus.CONFLICT);
+        error.setMessage(ex.getMessage());
+        return new ResponseEntity<>(error, error.getStatus());
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ApiError> handleWrongDataException(InvalidRequestException ex) {
+        ApiError error = new ApiError(HttpStatus.UNPROCESSABLE_ENTITY);
+        error.setMessage(ex.getMessage());
+        return new ResponseEntity<>(error, error.getStatus());
+    }
 }
