@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-public class BookControllerTest {
+public class BookServiceTest {
     private static final Author correctAuthor = new Author("Jane", "Doe");
 
     private static final List<Author> incorrectAuthors = Arrays.asList(
