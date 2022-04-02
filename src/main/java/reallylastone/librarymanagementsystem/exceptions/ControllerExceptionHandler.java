@@ -11,21 +11,21 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundException(EntityNotFoundException ex) {
-        ApiError error = new ApiError(HttpStatus.NOT_FOUND);
-        error.setMessage(ex.getMessage());
-        return new ResponseEntity<>(error, error.getStatus());
+        return createResponseEntity(HttpStatus.NOT_FOUND, ex);
     }
 
     @ExceptionHandler(EntityAlreadyExist.class)
     public ResponseEntity<ApiError> handleEntityAlreadyExistException(EntityAlreadyExist ex) {
-        ApiError error = new ApiError(HttpStatus.CONFLICT);
-        error.setMessage(ex.getMessage());
-        return new ResponseEntity<>(error, error.getStatus());
+        return createResponseEntity(HttpStatus.CONFLICT, ex);
     }
 
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ApiError> handleWrongDataException(InvalidRequestException ex) {
-        ApiError error = new ApiError(HttpStatus.UNPROCESSABLE_ENTITY);
+        return createResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY, ex);
+    }
+
+    private ResponseEntity<ApiError> createResponseEntity(HttpStatus status, Exception ex) {
+        ApiError error = new ApiError(status);
         error.setMessage(ex.getMessage());
         return new ResponseEntity<>(error, error.getStatus());
     }

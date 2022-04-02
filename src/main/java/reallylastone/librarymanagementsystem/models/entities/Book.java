@@ -2,8 +2,18 @@ package reallylastone.librarymanagementsystem.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Range;
 import reallylastone.librarymanagementsystem.models.Dimension;
 import reallylastone.librarymanagementsystem.models.PublicationPlace;
@@ -24,7 +34,7 @@ public class Book {
     @JsonProperty("ISBN")
     private Long ISBN;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Author author;
 
     private String title;
