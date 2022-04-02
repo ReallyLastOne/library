@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ public class Author {
 
     @OneToMany(mappedBy = "author")
     @JsonIgnore
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

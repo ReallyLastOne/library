@@ -24,6 +24,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return createResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY, ex);
     }
 
+    @ExceptionHandler(RequestNotAllowedException.class)
+    public ResponseEntity<ApiError> handle(RequestNotAllowedException ex) {
+        return createResponseEntity(HttpStatus.METHOD_NOT_ALLOWED, ex);
+    }
+
     private ResponseEntity<ApiError> createResponseEntity(HttpStatus status, Exception ex) {
         ApiError error = new ApiError(status);
         error.setMessage(ex.getMessage());
