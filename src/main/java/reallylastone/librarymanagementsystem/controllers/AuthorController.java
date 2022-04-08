@@ -3,6 +3,7 @@ package reallylastone.librarymanagementsystem.controllers;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import reallylastone.librarymanagementsystem.models.entities.Author;
@@ -31,6 +32,7 @@ public class AuthorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
         Author dbAuthor = authorService.save(author);
 
@@ -44,12 +46,14 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Author> deteleAuthor(@PathVariable(name = "id") Long id) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Author> deleteAuthor(@PathVariable(name = "id") Long id) {
         authorService.deleteAuthorById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MODERATOR')")
     public ResponseEntity<Author> updateAuthor(@RequestBody Author author, @PathVariable(name = "id") Long id) {
         authorService.updateAuthor(author, id);
         return new ResponseEntity<>(HttpStatus.OK);
