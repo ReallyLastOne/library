@@ -71,4 +71,22 @@ public class BookService {
         bookRepository.delete(dbBook);
         addBook(book); // bad practice?
     }
+
+    // ugly and hard to extend
+    public void patchBook(Book toUpdate, Book book) {
+        bookRepository.delete(toUpdate);
+        if (book.getAuthor() != null) toUpdate.setAuthor(book.getAuthor());
+        if (book.getISBN() != null) toUpdate.setISBN(book.getISBN());
+        if (book.getAgeRange() != null) toUpdate.setAgeRange(book.getAgeRange());
+        if (book.getTitle() != null) toUpdate.setTitle(book.getTitle());
+        if (book.getDimension() != null) toUpdate.setDimension(book.getDimension());
+        if (book.getBestsellersRank() != null) toUpdate.setBestsellersRank(book.getBestsellersRank());
+        if (book.getFormat() != null) toUpdate.setFormat(book.getFormat());
+        if (book.getImprint() != null) toUpdate.setImprint(book.getImprint());
+        if (book.getLanguage() != null) toUpdate.setLanguage(book.getLanguage());
+        if (book.getPublicationDate() != null) toUpdate.setPublicationDate(book.getPublicationDate());
+        if (book.getPublicationPlace() != null) toUpdate.setPublicationPlace(book.getPublicationPlace());
+        if (book.getPublisher() != null) toUpdate.setPublisher(book.getPublisher());
+        bookRepository.save(toUpdate);
+    }
 }

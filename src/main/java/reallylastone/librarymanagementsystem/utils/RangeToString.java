@@ -12,6 +12,7 @@ public class RangeToString implements AttributeConverter<Range<Integer>, String>
     @Override
     public Range<Integer> convertToEntityAttribute(String s) {
         // ugly... but it works
+        if (s == null || s.equals("")) return null;
         String left = s.substring(0, 1);
         String right = s.substring(s.length() - 1);
         Range<Integer> range;

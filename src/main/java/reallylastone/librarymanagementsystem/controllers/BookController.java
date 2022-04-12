@@ -24,7 +24,7 @@ public class BookController {
         this.authorService = authorService;
     }
 
-    @GetMapping
+    @GetMapping(value = {"", "/"})
     public List<Book> getAllBooks() {
         return bookService.getAll();
     }
@@ -44,7 +44,6 @@ public class BookController {
                 .expand(dbBook.getISBN()).toUri();
         final HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
-
         return new ResponseEntity<>(dbBook, headers, HttpStatus.CREATED);
     }
 
@@ -62,5 +61,10 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PatchMapping("/{id}")
+    public ResponseEntity<Book> patchBook(@PathVariable(name = "id") Long id, @RequestBody Book book) {
+        Book toUpdate = bookService.getBookById(id);
+        bookService.patchBook(toUpdate, book);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

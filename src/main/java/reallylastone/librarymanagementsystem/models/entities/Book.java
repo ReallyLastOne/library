@@ -2,18 +2,8 @@ package reallylastone.librarymanagementsystem.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.domain.Range;
 import reallylastone.librarymanagementsystem.models.Dimension;
 import reallylastone.librarymanagementsystem.models.PublicationPlace;
@@ -22,12 +12,14 @@ import reallylastone.librarymanagementsystem.utils.RangeToString;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Objects;
 
 @Entity
-@Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@Getter
+@Setter
 public class Book {
     @Id
     @Getter(AccessLevel.NONE)
@@ -37,6 +29,7 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Author author;
 
+    @Column(nullable = false)
     private String title;
 
     private String format;
@@ -68,5 +61,37 @@ public class Book {
 
     public Long getISBN() {
         return ISBN;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return author.equals(book.author) && title.equals(book.title) && Objects.equals(format, book.format) && Objects.equals(ageRange, book.ageRange) && Objects.equals(dimension, book.dimension) && Objects.equals(publisher, book.publisher) && Objects.equals(bestsellersRank, book.bestsellersRank) && Objects.equals(imprint, book.imprint) && Objects.equals(publicationDate, book.publicationDate) && Objects.equals(publicationPlace, book.publicationPlace) && Objects.equals(language, book.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, format, ageRange, dimension, publisher, bestsellersRank, imprint, publicationDate, publicationPlace, language);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "ISBN=" + ISBN +
+                ", author=" + author +
+                ", title='" + title + '\'' +
+                ", format='" + format + '\'' +
+                ", ageRange=" + ageRange +
+                ", dimension=" + dimension +
+                ", publisher=" + publisher +
+                ", bestsellersRank=" + bestsellersRank +
+                ", imprint='" + imprint + '\'' +
+                ", publicationDate=" + publicationDate +
+                ", publicationPlace=" + publicationPlace +
+                ", language=" + language +
+                '}';
     }
 }
