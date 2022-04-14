@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,109 +17,109 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookControllerTest {
-    private static final String CORRECT_BOOK_JSON = """
-            {
-                 "ISBN": 1225,
-                 "author": {
-                     "fname": "john",
-                     "lname": "doe"
-                 },
-                 "title": "title"
-             }
+public class AuthorControllerTest {
+    private static final String CORRECT_AUTHOR_JSON = """
+                        {
+                            "fName": "John",
+                            "lName": "Doe",
+                            "books": []                          
+                        }
             """;
+
+
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @Order(1)
-    void getBooksWhenUnAuthenticatedThenOk() throws Exception {
-        this.mockMvc.perform(get("/api/v1/books"))
+    void getAuthorsWhenUnAuthenticatedThenOk() throws Exception {
+        this.mockMvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @Order(2)
-    void getBookWhenUnAuthenticatedThenNotFound() throws Exception {
-        this.mockMvc.perform(get("/api/v1/books/1"))
+    void getAuthorWhenUnAuthenticatedThenNotFound() throws Exception {
+        this.mockMvc.perform(get("/api/v1/author/1"))
                 .andExpect(status().isNotFound());
     }
 
+
     @Test
     @Order(3)
-    void addBookWhenUnAuthenticatedThenUnauthorized() throws Exception {
-        this.mockMvc.perform(post("/api/v1/books").contentType("application/json").content("{}"))
+    void addAuthorWhenUnAuthenticatedThenUnauthorized() throws Exception {
+        this.mockMvc.perform(post("/api/v1/authors").contentType("application/json").content("{}"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @Order(4)
-    void updateBookWhenUnAuthenticatedThenUnauthorized() throws Exception {
-        this.mockMvc.perform(put("/api/v1/books/1").contentType("application/json").content("{}"))
+    void updateAuthorWhenUnAuthenticatedThenUnauthorized() throws Exception {
+        this.mockMvc.perform(put("/api/v1/authors/1").contentType("application/json").content("{}"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @Order(5)
-    void deleteBookWhenUnAuthenticatedThenUnauthorized() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/books/1225"))
+    void deleteAuthorWhenUnAuthenticatedThenUnauthorized() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/authors/1"))
                 .andExpect(status().isUnauthorized());
     }
 
     @WithMockUser(username = "user", authorities = {"USER"})
     @Test
     @Order(6)
-    void addBookWhenUserThenForbidden() throws Exception {
-        this.mockMvc.perform(post("/api/v1/books").contentType("application/json").content("{}"))
+    void addAuthorWhenUserThenForbidden() throws Exception {
+        this.mockMvc.perform(post("/api/v1/authors").contentType("application/json").content("{}"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockUser(username = "user", authorities = {"USER"})
     @Test
     @Order(7)
-    void updateBookWhenUserThenForbidden() throws Exception {
-        this.mockMvc.perform(put("/api/v1/books/1").contentType("application/json").content("{}"))
+    void updateAuthorWhenUserThenForbidden() throws Exception {
+        this.mockMvc.perform(put("/api/v1/authors/1").contentType("application/json").content("{}"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockUser(username = "user", authorities = {"USER"})
     @Test
     @Order(8)
-    void deleteBookWhenUserThenForbidden() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/books/1"))
+    void deleteAuthorWhenUserThenForbidden() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/authors/1"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockUser(username = "moderator", authorities = {"USER", "MODERATOR"})
     @Test
     @Order(9)
-    void addBookWhenModeratorThenCreated() throws Exception {
-        this.mockMvc.perform(post("/api/v1/books").contentType("application/json").content(CORRECT_BOOK_JSON))
+    void addAuthorWhenModeratorThenCreated() throws Exception {
+        this.mockMvc.perform(post("/api/v1/authors").contentType("application/json").content(CORRECT_AUTHOR_JSON))
                 .andExpect(status().isCreated());
     }
 
     @WithMockUser(username = "moderator", authorities = {"USER", "MODERATOR"})
     @Test
     @Order(10)
-    void updateBookWhenModeratorThenOk() throws Exception {
-        this.mockMvc.perform(put("/api/v1/books/1225").contentType("application/json").content(CORRECT_BOOK_JSON))
+    void updateAuthorWhenModeratorThenOk() throws Exception {
+        this.mockMvc.perform(put("/api/v1/authors/6").contentType("application/json").content(CORRECT_AUTHOR_JSON))
                 .andExpect(status().isOk());
     }
 
     @WithMockUser(username = "moderator", authorities = {"USER", "MODERATOR"})
     @Test
     @Order(11)
-    void deleteBookWhenModeratorThenForbidden() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/books/1225"))
+    void deleteAuthorWhenModeratorThenForbidden() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/authors/6"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockUser(username = "admin", authorities = {"USER", "MODERATOR", "ADMIN"})
     @Test
     @Order(12)
-    void addBookWhenAdminThenConflict() throws Exception {
+    void addAuthorWhenAdminThenConflict() throws Exception {
         // Conflict since Moderator already created book. This is the reason for @Order annotation.
-        this.mockMvc.perform(post("/api/v1/books").contentType("application/json").content(CORRECT_BOOK_JSON))
+        this.mockMvc.perform(post("/api/v1/authors").contentType("application/json").content(CORRECT_AUTHOR_JSON))
                 .andExpect(status().isConflict());
     }
 
@@ -126,50 +127,48 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "MODERATOR", "ADMIN"})
     @Test
     @Order(13)
-    void updateBookWhenAdminThenOk() throws Exception {
-        this.mockMvc.perform(put("/api/v1/books/1225").contentType("application/json").content(CORRECT_BOOK_JSON))
+    void updateAuthorWhenAdminThenOk() throws Exception {
+        this.mockMvc.perform(put("/api/v1/authors/6").contentType("application/json").content(CORRECT_AUTHOR_JSON))
                 .andExpect(status().isOk());
     }
 
     @WithMockUser(username = "admin", authorities = {"USER", "MODERATOR", "ADMIN"})
     @Test
     @Order(14)
-    void deleteBookWhenAdminThenOk() throws Exception {
-        this.mockMvc.perform(delete("/api/v1/books/1225"))
+    void deleteAuthorWhenAdminThenOk() throws Exception {
+        this.mockMvc.perform(delete("/api/v1/authors/6"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @Order(15)
-    void patchBookWhenUnAuthenticatedThenUnauthorized() throws Exception {
-        this.mockMvc.perform(patch("/api/v1/books/1225").contentType("application/json").content("{}"))
+    void patchAuthorWhenUnAuthenticatedThenUnauthorized() throws Exception {
+        this.mockMvc.perform(patch("/api/v1/authors/1").contentType("application/json").content("{}"))
                 .andExpect(status().isUnauthorized());
     }
 
     @WithMockUser(username = "user", authorities = {"USER"})
     @Test
     @Order(16)
-    void patchBookWhenUserThenForbidden() throws Exception {
-        this.mockMvc.perform(patch("/api/v1/books/1225").contentType("application/json").content("{}"))
+    void patchAuthorWhenUserThenForbidden() throws Exception {
+        this.mockMvc.perform(patch("/api/v1/authors/1`").contentType("application/json").content("{}"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockUser(username = "moderator", authorities = {"USER", "MODERATOR"})
     @Test
     @Order(17)
-    void patchBookWhenModeratorThenNoContent() throws Exception {
-        this.mockMvc.perform(post("/api/v1/books").contentType("application/json").content(CORRECT_BOOK_JSON));
-        this.mockMvc.perform(patch("/api/v1/books/1225").contentType("application/json").content(CORRECT_BOOK_JSON))
+    void patchAuthorWhenModeratorThenNoContent() throws Exception {
+        this.mockMvc.perform(post("/api/v1/authors").contentType("application/json").content(CORRECT_AUTHOR_JSON));
+        this.mockMvc.perform(patch("/api/v1/authors/7").contentType("application/json").content(CORRECT_AUTHOR_JSON))
                 .andExpect(status().isNoContent());
     }
 
     @WithMockUser(username = "admin", authorities = {"USER", "MODERATOR", "ADMIN"})
     @Test
     @Order(18)
-    void patchBookWhenAdminThenNoContent() throws Exception {
-        this.mockMvc.perform(post("/api/v1/books").contentType("application/json").content(CORRECT_BOOK_JSON));
-        this.mockMvc.perform(patch("/api/v1/books/1225").contentType("application/json").content(CORRECT_BOOK_JSON))
+    void patchAuthorWhenAdminThenNoContent() throws Exception {
+        this.mockMvc.perform(patch("/api/v1/authors/7").contentType("application/json").content(CORRECT_AUTHOR_JSON))
                 .andExpect(status().isNoContent());
     }
 }
-
