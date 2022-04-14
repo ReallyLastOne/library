@@ -74,8 +74,11 @@ public class BookService {
 
     // ugly and hard to extend
     public void patchBook(Book toUpdate, Book book) {
+        if (authorService.getAuthorByFNameAndLName(book.getAuthor().getFName(), book.getAuthor().getLName()).isEmpty()) {
+            if (book.getAuthor() != null) toUpdate.setAuthor(book.getAuthor());
+
+        }
         bookRepository.delete(toUpdate);
-        if (book.getAuthor() != null) toUpdate.setAuthor(book.getAuthor());
         if (book.getISBN() != null) toUpdate.setISBN(book.getISBN());
         if (book.getAgeRange() != null) toUpdate.setAgeRange(book.getAgeRange());
         if (book.getTitle() != null) toUpdate.setTitle(book.getTitle());

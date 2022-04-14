@@ -73,4 +73,11 @@ public class AuthorService {
             throw new RequestNotAllowedException("Author with books can not be deleted.");
         }
     }
+
+    @Transactional
+    public void patchAuthor(Author toUpdate, Author author) {
+        toUpdate.setFName(author.getFName());
+        toUpdate.setLName(author.getLName());
+        authorRepository.save(toUpdate);
+    }
 }

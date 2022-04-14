@@ -16,9 +16,6 @@ public class Publisher {
     @Id
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "publisher")
-    @JsonIgnore
-    private List<Book> books;
 
     @Override
     public String toString() {

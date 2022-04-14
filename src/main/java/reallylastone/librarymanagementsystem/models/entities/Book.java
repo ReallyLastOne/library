@@ -1,13 +1,11 @@
 package reallylastone.librarymanagementsystem.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.Range;
 import reallylastone.librarymanagementsystem.models.Dimension;
 import reallylastone.librarymanagementsystem.models.PublicationPlace;
-import reallylastone.librarymanagementsystem.utils.RangeSerializer;
+import reallylastone.librarymanagementsystem.models.dto.BookView;
 import reallylastone.librarymanagementsystem.utils.RangeToString;
 
 import java.time.LocalDateTime;
@@ -23,10 +21,9 @@ import java.util.Objects;
 public class Book {
     @Id
     @Getter(AccessLevel.NONE)
-    @JsonProperty("ISBN")
     private Long ISBN;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Author author;
 
     @Column(nullable = false)
@@ -35,7 +32,6 @@ public class Book {
     private String format;
 
     @Convert(converter = RangeToString.class)
-    @JsonSerialize(using = RangeSerializer.class)
     private Range<Integer> ageRange = Range.unbounded();
 
     @Embedded
@@ -79,19 +75,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "ISBN=" + ISBN +
-                ", author=" + author +
-                ", title='" + title + '\'' +
-                ", format='" + format + '\'' +
-                ", ageRange=" + ageRange +
-                ", dimension=" + dimension +
-                ", publisher=" + publisher +
-                ", bestsellersRank=" + bestsellersRank +
-                ", imprint='" + imprint + '\'' +
-                ", publicationDate=" + publicationDate +
-                ", publicationPlace=" + publicationPlace +
-                ", language=" + language +
-                '}';
+        return new BookView(this).toString();
     }
 }

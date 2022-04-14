@@ -1,6 +1,5 @@
 package reallylastone.librarymanagementsystem.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import reallylastone.librarymanagementsystem.models.dto.BookDto;
@@ -29,7 +28,6 @@ public class Author {
     private String lName;
 
     @OneToMany(mappedBy = "author")
-    @JsonIgnore
     private List<Book> books = new ArrayList<>();
 
     public void addBook(Book book) {
